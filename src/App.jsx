@@ -810,7 +810,9 @@ function App() {
                                 </p>
                                 <div className="flex flex-col desktop:flex-row desktop:justify-between gap-8 items-start desktop:mt-6">
                                     <div className="flex gap-1 items-center">
-                                        <p className="font-bold text-4xl">64</p>
+                                        <p className="font-bold text-4xl">
+                                            {blackEditionStock}
+                                        </p>
                                         <p className="text-nuetral-700 text-lg">
                                             left
                                         </p>
