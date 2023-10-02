@@ -93,9 +93,11 @@ function App() {
 
         if (pledge === 1) {
             setBambooStock((prev) => prev - 1);
-        } else if (pledge === 2) {
+        }
+        if (pledge === 2) {
             setBlackEditionStock((prev) => prev - 1);
-        } else if (pledge === 3) {
+        }
+        if (pledge === 3) {
             setMahoganyStock((prev) => prev - 1);
         }
     };
