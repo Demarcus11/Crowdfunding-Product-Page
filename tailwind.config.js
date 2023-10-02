@@ -28,8 +28,8 @@ export default {
                     "url('/public/images/image-hero-desktop.jpg')",
             },
             screens: {
-                desktop: "50em",
-                // => @media (min-width: 50em) { ... }
+                desktop: "70em",
+                // >= 1120px @media (min-width: 70em) { ... }
             },
         },
     },

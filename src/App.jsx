@@ -14,12 +14,16 @@ function App() {
     const [blackEditionStock, setBlackEditionStock] = useState(64);
     const [mahoganyStock, setMahoganyStock] = useState(0);
     // Would these do better as a useRef so we don't cause a re-render on each keystroke? or is it fine as a useState?
-    const [totalAmountRaised, setTotalAmountRaised] = useState(0);
+    const [totalAmountRaised, setTotalAmountRaised] = useState(
+        parseInt(localStorage.getItem("totalAmount")) || 0
+    );
     const [totalBackers, setTotalBackers] = useState(5007);
     const [daysLeft, setDaysLeft] = useState(56);
 
     const max = 100000;
     let percentage = Math.trunc((totalAmountRaised / max) * 100);
+    console.log(percentage);
+    console.log(totalAmountRaised);
 
     const modalRef = useRef(null);
 
@@ -84,6 +88,8 @@ function App() {
         closeModal();
         setTotalAmountRaised((prev) => prev + parseInt(pledgeAmount));
         setTotalBackers((prev) => (prev += 1));
+        // common React problem: if you try putting the totalAmountRaised in the local storage here then it won't update because React is asychronous meaning the code will reach this line before the state is updated, so we need to use useEffect to listen for changes in the totalAmountRaised state and then update the local storage
+        // localStorage.setItem("totalAmount", totalAmountRaised);
 
         if (pledge === 1) {
             setBambooStock((prev) => prev - 1);
@@ -93,6 +99,10 @@ function App() {
             setMahoganyStock((prev) => prev - 1);
         }
     };
+
+    useEffect(() => {
+        localStorage.setItem("totalAmount", totalAmountRaised);
+    }, [totalAmountRaised]);
 
     // Without the useEffect the when closing the modal with the escape key the modalOpened state is not updated and the hidden class wont be applied making it visible
     useEffect(() => {
@@ -715,9 +725,9 @@ function App() {
 
                             <div className="w-full bg-gray-200 rounded-full">
                                 <div
-                                    className={`progress-bar | mt-8 w-[${
-                                        percentage + "%"
-                                    }] h-[0.65rem] bg-primary-400 rounded-full`}
+                                    // Tailwind doesn't support adding class names dynamically so w-[${percentage + "%"}] doesn't work, gonna have to use a good old fashion inline style tag
+                                    className={`progress-bar | mt-8 h-[0.65rem] bg-primary-400 rounded-full`}
+                                    style={{ width: `${percentage}%` }}
                                 ></div>
                             </div>
                         </div>
