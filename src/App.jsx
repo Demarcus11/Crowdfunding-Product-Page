@@ -10,6 +10,9 @@ function App() {
     const [pledgeAmount, setPledgeAmount] = useState(0);
     const [pledgeSubmitted, setPledgeSubmitted] = useState(false);
     const [bookmarked, setBookmarked] = useState(false);
+    const [bambooStock, setBambooStock] = useState(101);
+    const [blackEditionStock, setBlackEditionStock] = useState(64);
+    const [mahoganyStock, setMahoganyStock] = useState(0);
     // Would these do better as a useRef so we don't cause a re-render on each keystroke? or is it fine as a useState?
     const [totalAmountRaised, setTotalAmountRaised] = useState(0);
     const [totalBackers, setTotalBackers] = useState(5007);
@@ -38,9 +41,6 @@ function App() {
     const handleSelectRewardClick = (id) => {
         setPledge(id);
         openModal();
-
-        console.log(id);
-        console.log(pledge);
 
         // We need setTimeout because the modal opens too fast and the scrollIntoView will already be executed before the modal is opened so it wont work, we delay the scrollIntoView so the modal fully opens then it scrolls
         setTimeout(() => {
@@ -84,6 +84,14 @@ function App() {
         closeModal();
         setTotalAmountRaised((prev) => prev + parseInt(pledgeAmount));
         setTotalBackers((prev) => (prev += 1));
+
+        if (pledge === 1) {
+            setBambooStock((prev) => prev - 1);
+        } else if (pledge === 2) {
+            setBlackEditionStock((prev) => prev - 1);
+        } else if (pledge === 3) {
+            setMahoganyStock((prev) => prev - 1);
+        }
     };
 
     // Without the useEffect the when closing the modal with the escape key the modalOpened state is not updated and the hidden class wont be applied making it visible
@@ -185,7 +193,7 @@ function App() {
                             <form action="#" method="dialog">
                                 <ul className="grid gap-8">
                                     <li
-                                        className="grid gap-4 py-6 desktop:py-8 border border-nuetral-700 border-opacity-20 rounded-xl data-[selected='true']:border-2 data-[selected='true']:border-primary-400"
+                                        className={`grid gap-4 py-6 desktop:py-8 border border-nuetral-700 border-opacity-20 rounded-xl data-[selected='true']:border-2 data-[selected='true']:border-primary-400`}
                                         data-selected={`${
                                             pledge === 0 ? "true" : "false"
                                         }`}
@@ -258,7 +266,9 @@ function App() {
                                     </li>
 
                                     <li
-                                        className="grid gap-4 py-6 desktop:py-8 border border-nuetral-700 border-opacity-20 rounded-xl data-[selected='true']:border-2 data-[selected='true']:border-primary-400"
+                                        className={`${
+                                            bambooStock <= 0 ? "opacity-40" : ""
+                                        } grid gap-4 py-6 desktop:py-8 border border-nuetral-700 border-opacity-20 rounded-xl data-[selected='true']:border-2 data-[selected='true']:border-primary-400`}
                                         data-selected={`${
                                             pledge === 1 ? "true" : "false"
                                         }`}
@@ -279,6 +289,9 @@ function App() {
                                                             setPledge(1)
                                                         }
                                                         className="scale-150 cursor-pointer"
+                                                        disabled={
+                                                            bambooStock <= 0
+                                                        }
                                                     />
                                                     <div className="flex flex-col desktop:flex-row desktop:gap-4">
                                                         <h3 className="font-bold">
@@ -290,7 +303,7 @@ function App() {
                                                     </div>
                                                 </div>
                                                 <p className="hidden desktop:block text-nuetral-900 font-bold text-xl">
-                                                    101{" "}
+                                                    {bambooStock}{" "}
                                                     <span className="text-nuetral-700 font-regular text-base">
                                                         left
                                                     </span>
@@ -306,7 +319,7 @@ function App() {
                                                 member list.
                                             </p>
                                             <p className="px-6 mt-4 text-nuetral-900 font-bold text-xl desktop:hidden">
-                                                101{" "}
+                                                {bambooStock}{" "}
                                                 <span className="text-nuetral-700 font-regular text-base">
                                                     left
                                                 </span>
@@ -330,6 +343,11 @@ function App() {
                                                         type="text"
                                                         placeholder="25"
                                                         className="focus-visible:outline-primary-400 w-full desktop:w-24 outline-none font-bold outline outline-1 outline-nuetral-700 rounded-full py-3 pl-7"
+                                                        onChange={(e) =>
+                                                            setPledgeAmount(
+                                                                e.target.value
+                                                            )
+                                                        }
                                                     />
                                                 </div>
                                                 <button
@@ -346,7 +364,11 @@ function App() {
                                     </li>
 
                                     <li
-                                        className="grid gap-4 py-6 desktop:py-8 border border-nuetral-700 border-opacity-20 rounded-xl data-[selected='true']:border-2 data-[selected='true']:border-primary-400"
+                                        className={`${
+                                            blackEditionStock <= 0
+                                                ? "opacity-40"
+                                                : ""
+                                        } grid gap-4 py-6 desktop:py-8 border border-nuetral-700 border-opacity-20 rounded-xl data-[selected='true']:border-2 data-[selected='true']:border-primary-400`}
                                         data-selected={`${
                                             pledge === 2 ? "true" : "false"
                                         }`}
@@ -367,6 +389,10 @@ function App() {
                                                             setPledge(2)
                                                         }
                                                         className="scale-150 cursor-pointer"
+                                                        disabled={
+                                                            blackEditionStock <=
+                                                            0
+                                                        }
                                                     />
                                                     <div className="flex flex-col desktop:flex-row desktop:gap-4">
                                                         <h3 className="font-bold">
@@ -378,7 +404,7 @@ function App() {
                                                     </div>
                                                 </div>
                                                 <p className="hidden desktop:block text-nuetral-900 font-bold text-xl">
-                                                    64{" "}
+                                                    {blackEditionStock}{" "}
                                                     <span className="text-nuetral-700 font-regular text-base">
                                                         left
                                                     </span>
@@ -394,7 +420,7 @@ function App() {
                                             </p>
                                         </label>
                                         <p className="px-6 mt-4 text-nuetral-900 font-bold text-xl desktop:hidden">
-                                            64{" "}
+                                            {blackEditionStock}{" "}
                                             <span className="text-nuetral-700 font-regular text-base">
                                                 left
                                             </span>
@@ -415,8 +441,13 @@ function App() {
                                                 <div className="after:content-['$'] after:text-nuetral-700 after:font-bold after:block relative after:absolute after:top-1/2 after:-translate-x-1/2 after:-translate-y-1/2 after:left-4">
                                                     <input
                                                         type="text"
-                                                        placeholder="25"
+                                                        placeholder="75"
                                                         className="focus-visible:outline-primary-400 w-full desktop:w-24 outline-none font-bold outline outline-1 outline-nuetral-700 rounded-full py-3 pl-7"
+                                                        onChange={(e) =>
+                                                            setPledgeAmount(
+                                                                e.target.value
+                                                            )
+                                                        }
                                                     />
                                                 </div>
                                                 <button
@@ -433,7 +464,11 @@ function App() {
                                     </li>
 
                                     <li
-                                        className="grid gap-4 py-10 border border-nuetral-700 border-opacity-20 rounded-xl data-[selected='true']:border-2 data-[selected='true']:border-primary-400"
+                                        className={`${
+                                            mahoganyStock <= 0
+                                                ? "opacity-40"
+                                                : ""
+                                        } grid gap-4 py-10 border border-nuetral-700 border-opacity-20 rounded-xl data-[selected='true']:border-2 data-[selected='true']:border-primary-400`}
                                         data-selected={`${
                                             pledge === 3 ? "true" : "false"
                                         }`}
@@ -454,6 +489,9 @@ function App() {
                                                             setPledge(3)
                                                         }
                                                         className="scale-150 cursor-pointer"
+                                                        disabled={
+                                                            mahoganyStock <= 0
+                                                        }
                                                     />
                                                     <div className="flex flex-col desktop:flex-row desktop:gap-4">
                                                         <h3 className="font-bold">
@@ -466,7 +504,7 @@ function App() {
                                                     </div>
                                                 </div>
                                                 <p className="hidden desktop:block text-nuetral-900 font-bold text-xl">
-                                                    0{" "}
+                                                    {mahoganyStock}{" "}
                                                     <span className="text-nuetral-700 font-regular text-base">
                                                         left
                                                     </span>
@@ -483,7 +521,7 @@ function App() {
                                             </p>
                                         </label>
                                         <p className="px-6 desktop:hidden mt-4 text-nuetral-900 font-bold text-xl">
-                                            0{" "}
+                                            {mahoganyStock}{" "}
                                             <span className="text-nuetral-700 font-regular text-base">
                                                 left
                                             </span>
@@ -504,8 +542,13 @@ function App() {
                                                 <div className="after:content-['$'] after:text-nuetral-700 after:font-bold after:block relative after:absolute after:top-1/2 after:-translate-x-1/2 after:-translate-y-1/2 after:left-4">
                                                     <input
                                                         type="text"
-                                                        placeholder="25"
+                                                        placeholder="200"
                                                         className="focus-visible:outline-primary-400 w-full desktop:w-24 outline-none font-bold outline outline-1 outline-nuetral-700 rounded-full py-3 pl-7"
+                                                        onChange={(e) =>
+                                                            setPledgeAmount(
+                                                                e.target.value
+                                                            )
+                                                        }
                                                     />
                                                 </div>
                                                 <button
@@ -699,7 +742,11 @@ function App() {
                                 to be stored under the stand.
                             </p>
 
-                            <div className="grid gap-4 p-6 border border-nuetral-700 border-opacity-20 rounded-xl">
+                            <div
+                                className={`${
+                                    bambooStock <= 0 ? "opacity-40" : ""
+                                } grid gap-4 p-6 border border-nuetral-700 border-opacity-20 rounded-xl`}
+                            >
                                 <div className="flex flex-col desktop:flex-row desktop:justify-between">
                                     <h3 className="font-bold">Bamboo Stand</h3>
                                     <p className="text-primary-400 font-medium">
@@ -715,7 +762,7 @@ function App() {
                                 <div className="flex flex-col desktop:flex-row desktop:justify-between gap-8 items-start desktop:mt-6">
                                     <div className="flex gap-1 items-center">
                                         <p className="font-bold text-4xl">
-                                            101
+                                            {bambooStock}
                                         </p>
                                         <p className="text-nuetral-700 text-lg">
                                             left
@@ -732,7 +779,11 @@ function App() {
                                 </div>
                             </div>
 
-                            <div className="grid gap-4 p-6 border border-nuetral-700 border-opacity-30 rounded-xl">
+                            <div
+                                className={`${
+                                    blackEditionStock <= 0 ? "opacity-40" : ""
+                                } grid gap-4 p-6 border border-nuetral-700 border-opacity-30 rounded-xl`}
+                            >
                                 <div className="flex flex-col desktop:flex-row desktop:justify-between">
                                     <h3 className="font-bold">
                                         Black Edition Stand
@@ -765,7 +816,11 @@ function App() {
                                 </div>
                             </div>
 
-                            <div className="grid gap-8 p-8 bg-nuetral-100 border border-nuetral-700 border-opacity-30 rounded-xl">
+                            <div
+                                className={`${
+                                    mahoganyStock <= 0 ? "opacity-40" : ""
+                                } grid gap-8 p-8 bg-nuetral-100 border border-nuetral-700 border-opacity-30 rounded-xl`}
+                            >
                                 <div className="flex flex-col desktop:flex-row desktop:justify-between">
                                     <h3 className="font-bold text-sm desktop:text-base">
                                         Mahogany Special Edition
@@ -792,8 +847,11 @@ function App() {
                                         onClick={() =>
                                             handleSelectRewardClick(3)
                                         }
+                                        disabled={mahoganyStock <= 0}
                                     >
-                                        Select Reward
+                                        {mahoganyStock <= 0
+                                            ? "Out of Stock"
+                                            : "Select Reward"}
                                     </button>
                                 </div>
                             </div>
